@@ -1,8 +1,5 @@
 package unicen.tallerjava.levenshtein;
 
-/**
- * Created by lucas on 15/06/17.
- */
 public class LevenshteinSentence {
     String id;
     String sentence;

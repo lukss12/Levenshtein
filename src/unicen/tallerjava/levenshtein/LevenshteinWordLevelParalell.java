@@ -3,15 +3,11 @@ package unicen.tallerjava.levenshtein;
 import java.util.List;
 import java.util.concurrent.RecursiveTask;
 
-/**
- * Created by lucas on 15/06/17.
- */
-
 /*Esta clase busca paralelizar el trabajo usando el metodo fork-join*/
 public class LevenshteinWordLevelParalell extends RecursiveTask<Integer> {
     //Este "Limita Secuencial" puede irse ajustando para encontrar una division del trabajo
     //mas uniforme
-    private static final long SEQUENTIAL_THRESHOLD = 10000000000l;
+    private static final long SEQUENTIAL_THRESHOLD = 5000000000l;
 
     private List<LevenshteinSentence> sentences;
     private int start;

@@ -1,6 +1,5 @@
 package unicen.tallerjava.levenshtein;
 
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,8 +18,16 @@ public class Main {
         ArrayList<LevenshteinSentence> sentences = new ArrayList<>(SIZE_LIMIT);
         StringBuilder stringBuffer= new StringBuilder();
 
+        if(args.length > 1){
+            System.out.println("Demasiados argumentos");
+            return;
+        }else if(args.length == 0){
+            System.out.println("Debe especificar un archivo de entrada");
+            return;
+        }
+
         try {
-            bis = new BufferedReader(new InputStreamReader(new FileInputStream("/home/lucas/Descargas/subset.txt")));
+            bis = new BufferedReader(new InputStreamReader(new FileInputStream(args[0])));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -58,7 +65,7 @@ public class Main {
             }
         }
         long startTime = System.currentTimeMillis();
-        LevenshteinWordLevelParalell paralellLevenshtein = new LevenshteinWordLevelParalell(sentences,0,sentences.size(),1);
+        LevenshteinWordLevelParalell paralellLevenshtein = new LevenshteinWordLevelParalell(sentences,0,sentences.size(),TRIM_DISTANCE);
         int found = ForkJoinPool.commonPool().invoke(paralellLevenshtein);
         System.out.println("Tiempo Paralelo Fork Join: " + ((System.currentTimeMillis() - startTime)* 1E-3));
         System.out.println("Found Pairs: " + found);

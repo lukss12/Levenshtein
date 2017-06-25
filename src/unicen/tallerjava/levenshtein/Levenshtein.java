@@ -1,12 +1,8 @@
 package unicen.tallerjava.levenshtein;
 
-import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
 import java.util.concurrent.*;
 
-/**
- * Created by lucas on 01/06/17.
- */
 public class Levenshtein {
     private static  ExecutorService executor;
 
@@ -14,14 +10,10 @@ public class Levenshtein {
     * sea menor o igual a un valor dado*/
     public static int sequentialWordLevelLevenshtein(List<LevenshteinSentence> sentences, int start,int end, int trim){
         int count = 0;
-        SimpleEntry<LevenshteinSentence,LevenshteinSentence> aux;
         for(int i = start; i < end; i++){
             for(int j = i + 1; j < sentences.size(); j++){
-                aux = minDistance(sentences.get(i),sentences.get(j),trim);
-                if( aux != null ){
+                if( minDistance(sentences.get(i),sentences.get(j),trim) != -1 ){
                     count++;
-                    System.out.println(aux.getKey().getSentence());
-                    System.out.println(aux.getValue().getSentence());
                 }
             }
         }
@@ -29,8 +21,9 @@ public class Levenshtein {
     }
 
     /*Calcular si la distancia levenshtein entre 2 oraciones a nivel palabra es menor o igual a
-    * un valor dado*/
-    public static SimpleEntry<LevenshteinSentence,LevenshteinSentence> minDistance(LevenshteinSentence leftLevenshtein, LevenshteinSentence rightLevenshtein , int trim) {
+    * un valor dado - Retorna -1 si la distancia pedida no es posible, y la distancia
+    * real en caso de ser menor o igual a la pedida*/
+    public static int minDistance(LevenshteinSentence leftLevenshtein, LevenshteinSentence rightLevenshtein , int trim) {
         int leftSentenceCantWords = leftLevenshtein.getCantWords() + 1; //+1 para la columna inicial del arreglo
         int rightSentenceCantWords = rightLevenshtein.getCantWords() + 1;
 
@@ -43,7 +36,7 @@ public class Levenshtein {
         //Si la diferencia de palabras es mayor al limite no es posible
         int diff = Math.abs(leftSentenceCantWords - rightSentenceCantWords);
         if(diff > trim)
-            return null;
+            return -1;
 
         //Array de distancias, estos arrays se intercambian para no tener que alojar una
         //matriz, ya que el algoritmo es incremental
@@ -152,7 +145,7 @@ public class Levenshtein {
             }
 
             if(trimCondition){
-                return null;
+                return -1;
             }
 
             //Se intercambia el array de costos actual para usarlo de base en la proxima iteracion
@@ -162,6 +155,6 @@ public class Levenshtein {
         }
 
         //System.out.println("Distancia Levenshtein: " + cost[leftSentenceCantWords-1]);
-        return new SimpleEntry(leftLevenshtein,rightLevenshtein);
+        return  cost[leftSentenceCantWords-1];
     }
 }
